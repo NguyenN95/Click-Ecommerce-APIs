@@ -1,8 +1,8 @@
 namespace Click.weatherforecast;
 
-public static class WeatherForecastRoutes
+public static class WeatherForecastGroupRoute
 {
-    public static RouteGroupBuilder MapRoutes(this RouteGroupBuilder group)
+    public static RouteGroupBuilder MapWeatherForecastRoutes(this RouteGroupBuilder group)
     {
         group.MapGet("/", GetWeatherForecast);
         return group;

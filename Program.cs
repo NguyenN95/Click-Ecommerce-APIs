@@ -33,7 +33,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapGroup("/weatherforecast")
-           .MapRoutes();
+           .MapWeatherForecastRoutes();
 
         app.Run();
     }
