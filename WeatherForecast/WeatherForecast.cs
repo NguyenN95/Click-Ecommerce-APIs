@@ -1,6 +1,6 @@
-namespace API.WeatherForecast;
+namespace Click.weatherforecast;
 
-public class WeatherForecastModel
+public class WeatherForecast
 {
     public DateOnly Date { get; set; }
 

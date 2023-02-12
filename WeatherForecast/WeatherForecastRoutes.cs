@@ -1,8 +1,8 @@
-namespace API.WeatherForecast;
+namespace Click.weatherforecast;
 
-public static class WeatherForecastEndpoint
+public static class WeatherForecastRoutes
 {
-    public static RouteGroupBuilder MapWeatherForecastApis(this RouteGroupBuilder group)
+    public static RouteGroupBuilder MapRoutes(this RouteGroupBuilder group)
     {
         group.MapGet("/", GetWeatherForecast);
         return group;
@@ -12,13 +12,14 @@ public static class WeatherForecastEndpoint
     {
         var summaries = weatherForecastRepo.GetSummaries();
         var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecastModel
+                new WeatherForecast
                 {
                     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                     TemperatureC = Random.Shared.Next(-20, 55),
                     Summary = summaries[Random.Shared.Next(summaries.Length)]
                 })
                 .ToArray();
+
         return Results.Ok(forecast);
     }
 }

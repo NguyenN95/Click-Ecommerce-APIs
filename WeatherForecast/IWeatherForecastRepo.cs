@@ -1,4 +1,4 @@
-namespace API.WeatherForecast;
+namespace Click.weatherforecast;
 
 public interface IWeatherForecastRepo
 {
