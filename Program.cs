@@ -1,3 +1,4 @@
+using Click.product;
 using Click.weatherforecast;
 
 namespace Click;
@@ -32,8 +33,13 @@ public class Program
 
         app.UseAuthorization();
 
-        app.MapGroup("/api/v1/weatherforecast")
+        var apisV1 = app.MapGroup("/api/v1");
+
+        apisV1.MapGroup("/weatherforecast")
            .MapWeatherForecastRoutes();
+
+        apisV1.MapGroup("/products")
+           .MapProductRoutes();
 
         app.Run();
     }
