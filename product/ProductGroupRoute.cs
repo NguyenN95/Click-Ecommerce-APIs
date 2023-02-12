@@ -1,3 +1,6 @@
+using Click.common;
+using Microsoft.EntityFrameworkCore;
+
 namespace Click.product;
 
 public static class ProductGroupRoute
@@ -9,13 +12,22 @@ public static class ProductGroupRoute
         return group;
     }
 
-    public static IResult GetProducts()
+    public static async Task<IResult> GetProducts(StoreContext context)
     {
-        return Results.Ok("This will print list of products");
+        var products = await context.Products.AsNoTracking().ToListAsync();
+        return Results.Ok(products);
     }
 
-    public static IResult GetProduct(int id)
+    public static async Task<IResult> GetProduct(StoreContext context, int id)
     {
-        return Results.Ok($"This will print product with id {id}");
+        var product = await context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+
+        if (product == null)
+            return Results.NotFound(new
+            {
+                error = "Product not found"
+            });
+
+        return Results.Ok(product);
     }
 }
