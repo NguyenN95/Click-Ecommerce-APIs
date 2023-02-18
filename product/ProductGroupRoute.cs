@@ -4,18 +4,32 @@ public static class ProductGroupRoute
 {
     public static RouteGroupBuilder MapProductsRoutes(this RouteGroupBuilder group)
     {
-        group.MapGet("/", GetProducts);
-        group.MapGet("/{id}", GetProduct);
+        group.MapGet("/", GetProductsAsync);
+        group.MapGet("/{id}", GetProductAsync);
+        group.MapGet("/brands", GetProductBrandsAsync);
+        group.MapGet("/types", GetProductTypesAsync);
         return group;
     }
 
-    public static async Task<IResult> GetProducts(IProductRepository productRepository)
+    private static async Task<IResult> GetProductTypesAsync(IProductRepository productRepository)
+    {
+        var types = await productRepository.GetProductTypesAsync();
+        return Results.Ok(types);
+    }
+
+    private static async Task<IResult> GetProductBrandsAsync(IProductRepository productRepository)
+    {
+        var brands = await productRepository.GetProductBrandsAsync();
+        return Results.Ok(brands);
+    }
+
+    private static async Task<IResult> GetProductsAsync(IProductRepository productRepository)
     {
         var products = await productRepository.GetProductsAsync();
         return Results.Ok(products);
     }
 
-    public static async Task<IResult> GetProduct(IProductRepository productRepository, int id)
+    private static async Task<IResult> GetProductAsync(IProductRepository productRepository, int id)
     {
         var product = await productRepository.GetProductByIdAsync(id);
 
