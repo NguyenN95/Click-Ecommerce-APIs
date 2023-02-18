@@ -14,21 +14,27 @@ public class ProductRepository : IProductRepository
 
     public async Task<IReadOnlyList<Product>> GetProductsAsync()
     {
-        return await _context.Products.AsNoTracking().ToListAsync();
+        return await _context.Products.AsNoTracking()
+            .Include(p => p.ProductType)
+            .Include(p => p.ProductBrand)
+            .ToListAsync();
     }
 
     public async Task<Product?> GetProductByIdAsync(int id)
     {
-        return await _context.Products.AsNoTracking().FirstOrDefaultAsync(product => product.Id == id);
+        return await _context.Products.AsNoTracking()
+            .Include(p => p.ProductType)
+            .Include(p => p.ProductBrand)
+            .FirstOrDefaultAsync(product => product.Id == id);
     }
 
     public async Task<IReadOnlyList<ProductBrand>> GetProductBrandsAsync()
     {
-        return await _context.ProductBrands.ToListAsync();
+        return await _context.ProductBrands.AsNoTracking().ToListAsync();
     }
 
     public async Task<IReadOnlyList<ProductType>> GetProductTypesAsync()
     {
-        return await _context.ProductTypes.ToListAsync();
+        return await _context.ProductTypes.AsNoTracking().ToListAsync();
     }
 }
