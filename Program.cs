@@ -59,6 +59,7 @@ public class Program
             try
             {
                 await context.Database.MigrateAsync();
+                await StoreContextSeed.SeedAsync(context);
             }
             catch (Exception ex)
             {
