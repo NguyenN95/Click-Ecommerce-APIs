@@ -7,7 +7,7 @@ namespace Click;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +34,7 @@ public class Program
         });
         // DI
         builder.Services.AddScoped<IWeatherForecastRepo, WeatherForecastRepo>();
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
         var app = builder.Build();
 
@@ -48,7 +49,22 @@ public class Program
            .MapWeatherForecastRoutes();
 
         apisV1.MapGroup("/products")
-           .MapProductRoutes();
+           .MapProductsRoutes();
+
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
+            try
+            {
+                await context.Database.MigrateAsync();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occured during migrations");
+            }
+        }
 
         app.Run();
     }

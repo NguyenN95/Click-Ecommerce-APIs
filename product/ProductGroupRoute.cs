@@ -1,26 +1,23 @@
-using Click.common;
-using Microsoft.EntityFrameworkCore;
-
 namespace Click.product;
 
 public static class ProductGroupRoute
 {
-    public static RouteGroupBuilder MapProductRoutes(this RouteGroupBuilder group)
+    public static RouteGroupBuilder MapProductsRoutes(this RouteGroupBuilder group)
     {
         group.MapGet("/", GetProducts);
         group.MapGet("/{id}", GetProduct);
         return group;
     }
 
-    public static async Task<IResult> GetProducts(StoreContext context)
+    public static async Task<IResult> GetProducts(IProductRepository productRepository)
     {
-        var products = await context.Products.AsNoTracking().ToListAsync();
+        var products = await productRepository.GetProductsAsync();
         return Results.Ok(products);
     }
 
-    public static async Task<IResult> GetProduct(StoreContext context, int id)
+    public static async Task<IResult> GetProduct(IProductRepository productRepository, int id)
     {
-        var product = await context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+        var product = await productRepository.GetProductByIdAsync(id);
 
         if (product == null)
             return Results.NotFound(new
